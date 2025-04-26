@@ -1,0 +1,34 @@
+{
+  "name": "api-nft",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "packageManager": "pnpm@9.14.2+sha512.6e2baf77d06b9362294152c851c4f278ede37ab1eba3a55fda317a4a17b209f4dbb973fb250a77abc463a341fcb1f17f17cfa24091c4eb319cda0d9b84278387",
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/express-fileupload": "^1.5.1",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.15.2",
+    "nodemon": "^3.1.10",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "express-fileupload": "^1.5.1",
+    "firebase-admin": "^13.3.0",
+    "multer": "1.4.5-lts.2",
+    "pug": "^3.0.3",
+    "rimraf": "^6.0.1",
+    "sharp": "^0.34.1"
+  }
+}
