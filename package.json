@@ -1,34 +1,55 @@
 {
-  "name": "upload-file",
-  "version": "1.0.0",
-  "description": "",
-  "main": ".myapp/app.js",
-  "scripts": {
-    "dev": "nodemon",
-    "build": "rimraf .myapp && tsc && cp -r src/public .myapp/public && cp .env ./.myapp/.env",
-    "start": "node .myapp/app.js"
-  },
-  "keywords": [],
-  "author": "Renzi Febriandika",
-  "license": "MIT",
-  "packageManager": "pnpm@9.14.2+sha512.6e2baf77d06b9362294152c851c4f278ede37ab1eba3a55fda317a4a17b209f4dbb973fb250a77abc463a341fcb1f17f17cfa24091c4eb319cda0d9b84278387",
-  "devDependencies": {
-    "@types/express": "^5.0.1",
-    "@types/express-fileupload": "^1.5.1",
-    "@types/multer": "^1.4.12",
-    "@types/node": "^22.15.2",
-    "nodemon": "^3.1.10",
-    "tsx": "^4.19.3",
-    "typescript": "^5.8.3"
-  },
-  "dependencies": {
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "express-fileupload": "^1.5.1",
-    "firebase-admin": "^13.3.0",
-    "multer": "1.4.5-lts.2",
-    "pug": "^3.0.3",
-    "rimraf": "^6.0.1",
-    "sharp": "^0.34.1"
-  }
+   "name": "upload-file",
+   "version": "1.0.0",
+   "description": "",
+   "main": ".myapp/app.js",
+   "scripts": {
+      "dev": "nodemon",
+      "build": "rimraf .myapp && tsc && cp -r src/public .myapp/public && cp .env ./.myapp/.env",
+      "start": "node .myapp/app.js",
+      "prepare": "husky",
+      "lint": "eslint ./src --ext .ts",
+      "lint:fix": "eslint ./src --ext .ts --fix",  
+      "format": "prettier --write .",
+      "format:check": "prettier --check .",
+      "check-types": "tsc --noEmit --pretty",
+      "check-lint": "eslint . --ext ts --ext tsx --ext js",
+      "check-format": "pnpm format:check"
+   },
+   "keywords": [],
+   "author": "Renzi Febriandika",
+   "license": "MIT",
+   "packageManager": "pnpm@9.14.2+sha512.6e2baf77d06b9362294152c851c4f278ede37ab1eba3a55fda317a4a17b209f4dbb973fb250a77abc463a341fcb1f17f17cfa24091c4eb319cda0d9b84278387",
+   "devDependencies": {
+      "@types/express": "^5.0.1",
+      "@types/express-fileupload": "^1.5.1",
+      "@types/multer": "^1.4.12",
+      "@types/node": "^22.15.2",
+      "@typescript-eslint/eslint-plugin": "^8.31.0",
+      "@typescript-eslint/parser": "^8.31.0",
+      "eslint": "^9.25.1",
+      "globals": "^16.0.0",
+      "husky": "^9.1.7",
+      "nodemon": "^3.1.10",
+      "prettier": "^3.5.3",
+      "tsx": "^4.19.3",
+      "typescript": "^5.8.3",
+      "typescript-eslint": "^8.31.0"
+   },
+   "dependencies": {
+      "dotenv": "^16.5.0",
+      "express": "^5.1.0",
+      "express-fileupload": "^1.5.1",
+      "firebase-admin": "^13.3.0",
+      "multer": "1.4.5-lts.2",
+      "pug": "^3.0.3",
+      "rimraf": "^6.0.1",
+      "sharp": "^0.34.1"
+   },
+   "husky": {
+      "hooks": {
+         "pre-commit": "npx pretty-quick --staged ng lint ng test",
+         "pre-push": "ng build --aot true"
+      }
+   }
 }
