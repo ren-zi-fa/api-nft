@@ -5,7 +5,7 @@
   "main": ".myapp/app.js",
   "scripts": {
     "dev": "nodemon",
-    "build": "tsc && cp .env ./.myapp/.env",
+    "build": "rimraf .myapp && tsc && cp -r src/public .myapp/public && cp .env ./.myapp/.env",
     "start": "node .myapp/app.js"
   },
   "keywords": [],

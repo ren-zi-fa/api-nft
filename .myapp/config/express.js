@@ -11,7 +11,7 @@ const app = (0, express_1.default)();
 exports.app = app;
 app.set("view engine", "pug");
 app.set("views", path_1.default.join(__dirname, "../../views"));
-app.use("/images", express_1.default.static(path_1.default.join(__dirname, "../../public/images")));
+app.use("/images", express_1.default.static(path_1.default.join(__dirname, "../public/images")));
 app.use(express_1.default.json());
 app.use(express_1.default.static("/public"));
 app.use("/admin", router_1.router);
