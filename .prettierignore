@@ -1,6 +1,5 @@
 eslint.config.mjs
 .prettierrc
-package.json
 pnpm-lock.yaml
 tsconfig.json
 readme.md

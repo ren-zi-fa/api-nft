@@ -1,21 +1,8 @@
-import express from 'express'
-import { upload } from '../middlewares/upload.middleware'
+import express, { Router } from 'express'
+import authRouter from './auth.route'
 
-const router = express.Router()
+const router = Router()
 
-router.post('/create-person', upload.single('photo'), (req, res) => {
-   const { nama, umur, alamat } = req.body
-   const fotoPath = req.file ? `/images/${req.file.filename}` : null
-
-   res.send({
-      message: 'Data received',
-      data: { nama, umur, alamat, foto: fotoPath }
-   })
-})
-
-router.get('/hello/:nama', (req, res) => {
-   const nama = req.params.nama
-   res.send({ message: `hallo ${nama}` })
-})
+router.use('/auth', authRouter)
 
 export { router }

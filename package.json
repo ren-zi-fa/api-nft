@@ -7,14 +7,7 @@
       "dev": "nodemon",
       "build": "rimraf .myapp && tsc && cp -r src/public .myapp/public && cp .env ./.myapp/.env",
       "start": "node .myapp/app.js",
-      "prepare": "husky",
-      "lint": "eslint ./src --ext .ts",
-      "lint:fix": "eslint ./src --ext .ts --fix",  
-      "format": "prettier --write .",
-      "format:check": "prettier --check .",
-      "check-types": "tsc --noEmit --pretty",
-      "check-lint": "eslint . --ext ts --ext tsx --ext js",
-      "check-format": "pnpm format:check"
+      "format": "prettier --write ."
    },
    "keywords": [],
    "author": "Renzi Febriandika",
@@ -41,15 +34,9 @@
       "express": "^5.1.0",
       "express-fileupload": "^1.5.1",
       "firebase-admin": "^13.3.0",
+      "joi": "^17.13.3",
       "multer": "1.4.5-lts.2",
-      "pug": "^3.0.3",
       "rimraf": "^6.0.1",
       "sharp": "^0.34.1"
-   },
-   "husky": {
-      "hooks": {
-         "pre-commit": "npx pretty-quick --staged ng lint ng test",
-         "pre-push": "ng build --aot true"
-      }
    }
 }

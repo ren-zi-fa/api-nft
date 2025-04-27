@@ -2,7 +2,7 @@ import path from 'path'
 import dotenv from 'dotenv'
 
 // Gantikan __dirname
-dotenv.config({ path: path.resolve(__dirname, '../../.env') })
+dotenv.config({ path: path.resolve(__dirname, '../../.env.development') })
 
 // Export config
 export default {
