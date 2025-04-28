@@ -1,58 +1,7 @@
 import { checkSchema, ParamSchema } from 'express-validator'
-import { db } from '../config/firebase'
+import { makeEmailField, makeUsernameField } from '../helper/schema.helper'
 
 type FieldSchema = Record<string, ParamSchema>
-
-const usernameField: FieldSchema = {
-   username: {
-      in: ['body'],
-      optional: true,
-      isLength: {
-         options: { min: 3 },
-         errorMessage: 'Username minimal 3 karakter'
-      },
-      custom: {
-         options: async (value) => {
-            if (value) {
-               const userRef = await db
-                  .collection('users')
-                  .where('username', '==', value)
-                  .get()
-               if (userRef.empty) {
-                  throw new Error('Username tidak ditemukan')
-               }
-            }
-            return true
-         }
-      }
-   }
-}
-
-const emailField: FieldSchema = {
-   email: {
-      in: ['body'],
-      optional: true,
-      notEmpty: {
-         errorMessage: 'Email tidak boleh kosong'
-      },
-      isEmail: {
-         errorMessage: 'Inputan harus berupa email yang valid'
-      },
-      custom: {
-         options: async (value) => {
-            const userRef = await db
-               .collection('users')
-               .where('email', '==', value)
-               .get()
-
-            if (!userRef.empty) {
-               throw new Error('Email sudah terdaftar')
-            }
-            return true
-         }
-      }
-   }
-}
 
 const passwordField: FieldSchema = {
    password: {
@@ -71,14 +20,40 @@ const passwordField: FieldSchema = {
    }
 }
 
+const passwordConfirmationField: FieldSchema = {
+   password_confirmation: {
+      in: ['body'],
+      notEmpty: {
+         errorMessage: 'Konfirmasi password wajib diisi'
+      },
+      custom: {
+         options: (value, { req }) => {
+            if (value !== req.body.password) {
+               throw new Error('password yang anda inputkan tidak sesuai')
+            }
+            return true
+         }
+      }
+   }
+}
+
 const registerValidation = checkSchema({
-   ...usernameField,
-   ...emailField,
-   ...passwordField
+   ...makeUsernameField(),
+   ...makeEmailField({
+      includeIsEmail: true,
+      includeCustomUniqueCheck: true,
+      optional: false
+   }),
+   ...passwordField,
+   ...passwordConfirmationField
 })
 const loginValidation = checkSchema({
-   ...usernameField,
-   ...emailField,
+   ...makeUsernameField({ optional: true, includeIsLength: true }),
+   ...makeEmailField({
+      includeIsEmail: true,
+      includeCustomUniqueCheck: false,
+      optional: true
+   }),
    ...passwordField
 })
 
