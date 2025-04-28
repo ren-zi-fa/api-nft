@@ -1,6 +1,6 @@
 import express from 'express'
 import { productController } from '../controller'
-import { productValidation } from '../schema/product.schema'
+import { productValidation } from '../validation/product.schema'
 
 const router = express.Router()
 
