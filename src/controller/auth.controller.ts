@@ -87,7 +87,7 @@ const login = async (req: Request, res: Response) => {
          },
          JWT_SECRET,
          {
-            expiresIn: '3h'
+            expiresIn: '5m'
          }
       )
       const refresh_token = jwt.sign(
@@ -108,7 +108,7 @@ const login = async (req: Request, res: Response) => {
       res.status(200).json({
          message: 'Login berhasil',
          acces_token: acces_token,
-         refres_token: refresh_token
+         refresh_token: refresh_token
       })
    } catch (error) {
       console.error(error)
