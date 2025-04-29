@@ -1,5 +1,9 @@
 import { checkSchema, ParamSchema } from 'express-validator'
-import { makeEmailField, makeUsernameField } from '../helper/schema.helper'
+import {
+   makeEmailField,
+   makeLoginNameField,
+   makeUsernameField
+} from '../helper/schema.helper'
 
 type FieldSchema = Record<string, ParamSchema>
 
@@ -48,12 +52,7 @@ const registerValidation = checkSchema({
    ...passwordConfirmationField
 })
 const loginValidation = checkSchema({
-   ...makeUsernameField({ optional: true, includeIsLength: true }),
-   ...makeEmailField({
-      includeIsEmail: true,
-      includeCustomUniqueCheck: false,
-      optional: true
-   }),
+   ...makeLoginNameField(),
    ...passwordField
 })
 

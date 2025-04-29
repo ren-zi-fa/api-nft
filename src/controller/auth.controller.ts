@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { db } from '../config/firebase'
 import { matchedData, validationResult } from 'express-validator'
 import bcrypt from 'bcrypt'
@@ -48,50 +48,61 @@ const login = async (req: Request, res: Response) => {
          })
          return
       }
+
       const data = matchedData(req)
-      const { username, email, password } = data
+      const { login_name, password } = data
+      console.log(password, login_name)
+
+      const isEmail = /@(gmail|yahoo|outlook|icloud)\.com$/.test(login_name)
 
       let userQuery
 
-      if (email) {
-         userQuery = db.collection('users').where('email', '==', email).limit(1)
-      } else if (username) {
+      if (isEmail) {
          userQuery = db
             .collection('users')
-            .where('username', '==', username)
+            .where('email', '==', login_name)
             .limit(1)
       } else {
-         res.status(400).json({
-            message: 'Username atau email harus diisi'
-         })
-         return
+         userQuery = db
+            .collection('users')
+            .where('username', '==', login_name)
+            .limit(1)
       }
+
       const userSnapshot = await userQuery.get()
 
       if (userSnapshot.empty) {
-         res.status(400).json({ message: 'User tidak ditemukan' })
+         res.status(400).json({
+            message: 'Username atau email tidak ditemukan'
+         })
          return
       }
+
       const userDoc = userSnapshot.docs[0]
       const userId = userDoc.id
+      const user = userDoc.data()
 
-      const user = userSnapshot.docs[0].data()
       const isPasswordValid = await bcrypt.compare(password, user.password)
+      if (!isPasswordValid) {
+         res.status(400).json({ message: 'Password salah' })
+         return
+      }
+
       const JWT_SECRET = vars.JWT_SECRET as string
-      const acces_token = jwt.sign(
+
+      const access_token = jwt.sign(
          {
-            userId: userId,
-            username: username,
-            email: email,
+            userId,
+            username: user.username,
+            email: user.email,
             tokenType: 'access'
          },
          JWT_SECRET,
-         {
-            expiresIn: '5m'
-         }
+         { expiresIn: '5m' }
       )
+
       const refresh_token = jwt.sign(
-         { userId: userId, tokenType: 'refresh' },
+         { userId, tokenType: 'refresh' },
          JWT_SECRET,
          { expiresIn: '30d' }
       )
@@ -100,15 +111,10 @@ const login = async (req: Request, res: Response) => {
          refreshToken: refresh_token
       })
 
-      if (!isPasswordValid) {
-         res.status(400).json({ message: 'Password salah' })
-         return
-      }
-
       res.status(200).json({
          message: 'Login berhasil',
-         acces_token: acces_token,
-         refresh_token: refresh_token
+         access_token,
+         refresh_token
       })
    } catch (error) {
       console.error(error)

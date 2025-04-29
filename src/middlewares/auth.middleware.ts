@@ -4,9 +4,9 @@ const ensureEmailOrUsername = (
    res: Response,
    next: NextFunction
 ) => {
-   const { email, username } = req.body
+   const { login_name } = req.body
 
-   if (!email && !username) {
+   if (!login_name) {
       res.status(400).json({
          success: false,
          message: 'Email atau Username harus diisi salah satu.'
