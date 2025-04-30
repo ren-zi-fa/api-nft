@@ -9,5 +9,5 @@ export default {
    env: process.env.NODE_ENV,
    port: process.env.PORT,
    FIREBASE_SERVICE_ACCOUNT: process.env.FIREBASE_SERVICE_ACCOUNT,
-   JWT_SECRET: process.env.JWT_SECRET,
+   JWT_SECRET: process.env.JWT_SECRET
 }

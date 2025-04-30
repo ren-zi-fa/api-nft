@@ -14,4 +14,3 @@ try {
 } catch (err) {
    console.log('Token invalid', err)
 }
-

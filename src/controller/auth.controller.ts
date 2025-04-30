@@ -1,10 +1,10 @@
-import { NextFunction, Request, Response } from 'express'
+import { Request, Response } from 'express'
 import { db } from '../config/firebase'
 import { matchedData, validationResult } from 'express-validator'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import vars from '../config/vars'
-
+import { FieldValue } from 'firebase-admin/firestore'
 const register = async (req: Request, res: Response) => {
    try {
       const result = validationResult(req)
@@ -51,7 +51,6 @@ const login = async (req: Request, res: Response) => {
 
       const data = matchedData(req)
       const { login_name, password } = data
-      console.log(password, login_name)
 
       const isEmail = /@(gmail|yahoo|outlook|icloud)\.com$/.test(login_name)
 
@@ -70,7 +69,6 @@ const login = async (req: Request, res: Response) => {
       }
 
       const userSnapshot = await userQuery.get()
-
       if (userSnapshot.empty) {
          res.status(400).json({
             message: 'Username atau email tidak ditemukan'
@@ -125,4 +123,41 @@ const login = async (req: Request, res: Response) => {
    }
 }
 
-export { register, login }
+const logout = async (req: Request, res: Response) => {
+   try {
+      const { refresh_token } = req.body
+
+      if (!refresh_token) {
+         res.status(400).json({ message: 'Refresh token tidak ditemukan' })
+         return
+      }
+
+      const queryLogout = db
+         .collection('users')
+         .where('refreshToken', '==', refresh_token)
+         .limit(1)
+
+      const userSnapshot = await queryLogout.get()
+
+      if (userSnapshot.empty) {
+         res.status(400).json({
+            message: 'Refresh token tidak valid atau sudah tidak aktif'
+         })
+         return
+      }
+
+      const doc = userSnapshot.docs[0]
+
+      await doc.ref.update({
+         refreshToken: FieldValue.delete()
+      })
+
+      res.status(200).json({ message: 'Logout berhasil' })
+   } catch (error) {
+      console.error('Error saat logout:', error)
+      res.status(500).json({
+         message: 'Terjadi kesalahan saat proses logout. Coba lagi nanti.'
+      })
+   }
+}
+export { register, login, logout }
