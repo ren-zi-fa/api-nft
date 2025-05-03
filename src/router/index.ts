@@ -1,10 +1,11 @@
 import express, { Router } from 'express'
 import authRouter from './auth.route'
-import productRouter from './product.route'
+
+import nftRouter from './nft.route'
 
 const router = Router()
 
 router.use('/auth', authRouter)
-router.use('/product', productRouter)
 
+router.use('/nft',nftRouter)
 export { router }
