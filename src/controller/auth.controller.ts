@@ -176,11 +176,15 @@ const logout = async (req: Request, res: Response) => {
    }
 }
 
-const refreshToken = async (req: Request, res: Response) => {
+const refreshToken = async (
+   req: Request,
+   res: Response,
+   next: NextFunction
+) => {
    const { refresh_token } = req.cookies
 
    if (!refresh_token) {
-       res.status(401).json({
+      res.status(401).json({
          success: false,
          message: 'Refresh token tidak ada'
       })
